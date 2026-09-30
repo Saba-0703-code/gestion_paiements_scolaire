@@ -1,8 +1,6 @@
 
 ---
 
-## ✅ Remplace complètement ton fichier `README.md` par ceci :
-
 ```markdown
 # Application de Gestion des Paiements Scolaires
 
@@ -11,13 +9,13 @@ Application de bureau pour suivre les frais et paiements des élèves dans les �
 ---
 
 ## 📋 Fonctionnalités
-- ✅ Gestion des élèves (ajout, modification, suppression, recherche, filtre par classe)
-- ✅ Enregistrement des paiements avec validation du solde (interdit solde négatif)
-- ✅ Calcul automatique du solde et du statut : **Soldé / Partiellement payé / Non payé**
-- ✅ Historique complet des versements par élève
-- ✅ Génération de reçus PDF numérotés — ré-impression possible à tout moment
-- ✅ Tableau de bord avec indicateurs
-- ✅ Charte graphique : bleu unique + blanc + gris
+-  Gestion des élèves (ajout, modification, suppression, recherche, filtre par classe)
+-  Enregistrement des paiements avec validation du solde (interdit solde négatif)
+-  Calcul automatique du solde et du statut : **Soldé / Partiellement payé / Non payé**
+-  Historique complet des versements par élève
+-  Génération de reçus PDF numérotés — ré-impression possible à tout moment
+-  Tableau de bord avec indicateurs
+-  Charte graphique : bleu unique + blanc + gris
 
 ---
 
