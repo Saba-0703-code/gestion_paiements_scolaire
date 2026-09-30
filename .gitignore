@@ -1,0 +1,20 @@
+# Fichiers générés par Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environnement virtuel
+.venv/
+venv/
+
+# Base de données
+*.db
+data/*.db
+
+# Reçus générés
+recus/
+*.pdf
+
+# Fichiers temporaires
+*.bak
+*.tmp
