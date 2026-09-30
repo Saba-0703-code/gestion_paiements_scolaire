@@ -1,0 +1,24 @@
+# Environnement virtuel
+.venv/
+venv/
+env/
+
+# Fichiers Python générés
+__pycache__/
+*.pyc
+*.pyo
+
+# Base de données SQLite
+*.db
+data/*.db
+
+# Reçus PDF générés
+recus/*.pdf
+recus/
+
+# Fichiers de sauvegarde
+*.bak
+*.tmp
+
+# Exécutable
+*.exe
