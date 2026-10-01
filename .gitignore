@@ -18,3 +18,6 @@ recus/
 # Fichiers temporaires
 *.bak
 *.tmp
+build/
+dist/
+*.spec
