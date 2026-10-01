@@ -1,3 +1,4 @@
+from PySide6.QtGui import QPixmap
 from ui.eleve_form import EcranListeEleves
 from ui.tableau_bord import EcranTableauBord
 
