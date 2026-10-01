@@ -1,9 +1,12 @@
 
-# Documentation Technique — Gestion des Paiements Scolaires
+# Documentation Technique  Gestion des Paiements Scolaires
 
 **Projet :** EduPaie
+
 **Auteur :** Saba Akouété Félicio
+
 **Date :** 30/09/2026
+
 **Version :** 1.0
 
 ---

@@ -31,16 +31,15 @@ class DialoguePaiement(QDialog):
         # Solde actuel
         versement_total = EleveRepository.total_verse(self.id_eleve)
         self.solde_restant = self.eleve["montant_total_du"] - versement_total
-        self.label_solde = QLabel(f"Solde restant : <b>{self.solde_restant:,} FCFA</b>")
-        layout.addWidget(self.label_solde)
+        self.label_solde = QLabel(f"Solde restant : <b>{self.solde_restant:,.0f} FCFA</b>")
 
         # Formulaire
         form = QFormLayout()
 
         self.montant_edit = QDoubleSpinBox()
-        self.montant_edit.setRange(1, self.solde_restant)
-        self.montant_edit.setMaximumWidth(200)
-        self.montant_edit.valueChanged.connect(self.verifier_montant)
+        self.montant_edit.setRange(1.0, float(self.solde_restant))
+        self.montant_edit.setDecimals(0)
+        self.montant_edit.setSuffix(" FCFA")
 
         self.date_edit = QDateEdit(QDate.currentDate())
         self.date_edit.setDisplayFormat("yyyy-MM-dd")
@@ -60,23 +59,26 @@ class DialoguePaiement(QDialog):
         boutons.rejected.connect(self.reject)
         layout.addWidget(boutons)
 
-    def verifier_montant(self, valeur):
-        if valeur > self.solde_restant:
-            self.montant_edit.setStyleSheet("background: #ffdddd;")
-        else:
-            self.montant_edit.setStyleSheet("")
-
     def valider(self):
         montant = self.montant_edit.value()
         date = self.date_edit.date().toString("yyyy-MM-dd")
         mode = self.mode_edit.currentText()
 
-        succes, message, numero_recu = enregistrer_paiement_securise(
+        succes, message, numero_recu, chemin_pdf = enregistrer_paiement_securise(
             self.id_eleve, montant, mode, date
         )
 
         if succes:
             QMessageBox.information(self, "Succès", f"{message}\nReçu N° {numero_recu}")
+            # Ouvrir le PDF
+            import os
+            import sys
+            if chemin_pdf and os.path.exists(chemin_pdf):
+                try:
+                    if sys.platform == "win32":
+                        os.startfile(chemin_pdf)
+                except Exception:
+                    pass
             self.accept()
         else:
             QMessageBox.warning(self, "Erreur", message)

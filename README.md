@@ -1,286 +1,139 @@
-***
+# Gestion des paiements scolaires
 
+Application de bureau en Python pour gérer les élèves, les paiements, les soldes et les reçus de paiement dans un établissement scolaire.
 
+## Présentation
 
+Cette application permet de :
+
+- enregistrer et consulter la liste des élèves ;
+- suivre le montant total des frais ;
+- enregistrer des versements ;
+- calculer automatiquement le solde restant ;
+- afficher le statut de chaque élève (non payé, partiellement payé, soldé) ;
+- générer des reçus PDF.
+
+Elle est développée avec PySide6 pour l'interface graphique et SQLite pour le stockage local des données.
+
+## Fonctionnalités
+
+- gestion des élèves ;
+- ajout de paiements avec validation du montant ;
+- calcul automatique du solde ;
+- historique des versements ;
+- génération de reçus PDF ;
+- tableau de bord de synthèse ;
+- interface ergonomique avec palette bleue et style personnalisé.
+
+## Prérequis
+
+- Python 3.10 ou plus récent ;
+- un système d'exploitation compatible avec PySide6 (Windows, Linux, macOS).
+
+## Installation
+
+1. Placez-vous dans le dossier du projet :
+
+```bash
+cd chemin/vers/gestion_paiements_scolaire
 ```
-\# Application de Gestion des Paiements Scolaires
 
-Application de bureau pour suivre les frais et paiements des élèves dans les établissements scolaires. Plus de cahier de caisse papier : tout est automatisé, calculé et traçable.
+2. Créez un environnement virtuel :
 
-\---
-
-\## 📋 Fonctionnalités
-
-\-  Gestion des élèves (ajout, modification, suppression, recherche, filtre par classe)
-
-\-  Enregistrement des paiements avec validation du solde (interdit solde négatif)
-
-\-  Calcul automatique du solde et du statut : \*\*Soldé / Partiellement payé / Non payé\*\*
-
-\-  Historique complet des versements par élève
-
-\-  Génération de reçus PDF numérotés — ré-impression possible à tout moment
-
-\-  Tableau de bord avec indicateurs
-
-\-  Charte graphique : bleu unique + blanc + gris
-
-\---
-
-\##  Prérequis
-
-\- Python 3.10 ou supérieur
-
-\---
-
-\##  Installation
-
-\`\`\`bash
-
-\# 1. Se placer dans le dossier du projet
-
-cd \~/Desktop/gestion\_paiements\_scolaire
-
-\# 2. Créer l'environnement virtuel
-
+```bash
 python -m venv .venv
+```
 
-\# 3. Activer l'environnement
+3. Activez-le :
 
-\# Git Bash :
+- Windows PowerShell :
 
-source .venv/Scripts/activate
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-\# Windows CMD :
+- Windows CMD :
 
+```cmd
 .venv\Scripts\activate.bat
+```
 
-\# 4. Installer les dépendances
+- Git Bash / bash Linux/macOS :
 
+```bash
+source .venv/Scripts/activate
+```
+
+4. Installez les dépendances :
+
+```bash
 pip install -r requirements.txt
 ```
 
-
-
-***
-
 ## Lancement
 
-
-
-```
+```bash
 python main.py
 ```
 
-
-
-***
-
-## Charger le jeu de données de test (15 élèves)
-
-
-
-```
-python data/jeu\_test.py
-```
-
-→ Répondre `oui` quand demandé.
-
-
-
-***
-
-## 📖 Manuel Utilisateur
-
-### 1. Enregistrer un élève
-
-
-
-1. Aller dans **Liste des élèves**
-
-2. Cliquer sur **« Nouvel élève »**
-
-3. Remplir : nom, prénom, classe, année scolaire, montant total des frais
-
-4. Valider → l'élève apparaît dans la liste
-
-### 2. Enregistrer un paiement
-
-
-
-1. Cliquer sur le nom de l'élève dans la liste
-
-2. Dans la fiche, cliquer sur **« ➕ Enregistrer un versement »**
-
-3. Saisir : montant, date, mode de paiement
-
-4. Valider → **le reçu PDF s'ouvre automatiquement**
-
-> Le montant ne peut pas dépasser le solde restant dû.
-
-### 3. Voir ou ré-imprimer un reçu
-
-
-
-1. Dans la fiche élève → Historique des paiements
-
-2. Cliquer sur **« Voir reçu »**
-
-3. Le PDF se génère dans le dossier `recus/` et s'ouvre immédiatement
-
-4. Ré-imprimable à tout moment
-
-### 4. Suivre les paiements
-
-
-
-* **Recherche** : taper un nom dans la barre en haut
-
-* **Filtre** : choisir une classe dans la liste déroulante
-
-* **Statut** : Soldé / Partiellement payé / Non payé affiché dans la liste
-
-
-
-***
-
-## 🏗️ Architecture du projet
-
-
-
-```
-gestion\_paiements\_scolaire/
-
-├── data/                ← Couche données
-
-│   ├── database.py      ← Connexion & création tables
-
-│   └── repositories.py  ← Requêtes SQL uniquement
-
-├── business/            ← Couche métier
-
-│   ├── services.py      ← Règles, calculs, validations
-
-│   └── recu\_pdf.py      ← Génération des reçus PDF
-
-├── ui/                  ← Couche interface
-
-│   ├── main\_window.py
-
-│   ├── eleve\_form.py
-
-│   ├── paiement\_dialog.py
-
-│   ├── fiche\_eleve.py
-
-│   └── tableau\_bord.py
-
-├── resources/           ← Style graphique QSS
-
-├── recus/               ← Reçus PDF générés (auto-créé)
-
-├── docs/                ← Documentation complémentaire
-
-├── main.py              ← Point d'entrée
-
-├── requirements.txt     ← Dépendances
-
-└── README.md            ← Ce fichier
+Le programme démarre la fenêtre principale et charge le style graphique prévu dans le dossier `resources`.
+
+## Structure du projet
+
+```text
+gestion_paiements_scolaire/
+├── business/
+│   └── __init__.py
+├── data/
+│   ├── __init__.py
+│   └── gestion_paiements.db
+├── docs/
+├── resources/
+│   └── style.qss
+├── ui/
+│   ├── __init__.py
+│   ├── fiche_eleve.py
+│   ├── main_window.py
+│   └── tableau_bord.py
+├── .gitignore
+├── main.py
+├── README.md
+├── requirements.txt
+└── .venv/
 ```
 
-> **Règle d'or**
->
->  : Aucune requête SQL dans le dossier 
->
-> `ui/`
->
->  — tout passe par 
->
-> `data/`
->
->  ✅
+## Base de données
 
+Le projet utilise SQLite. La base est créée localement dans le dossier `data` et stocke les informations relatives aux élèves et aux paiements.
 
+## Développement
 
-***
+Les fichiers principaux sont :
 
-## 🗄️ Schéma de la base de données
+- `main.py` : point d'entrée de l'application ;
+- `ui/main_window.py` : fenêtre principale et navigation ;
+- `ui/fiche_eleve.py` : fiche détaillée d'un élève ;
+- `ui/tableau_bord.py` : synthèse du tableau de bord ;
+- `resources/style.qss` : style visuel de l'interface.
 
-Table :	Champs
+## Notes
 
-eleve :	id\_eleve, nom, prenom, classe, annee\_scolaire, montant\_total\_du
+- Le projet est conçu pour un usage local et mono-utilisateur.
+- Les reçus PDF sont générés à partir des informations de paiement enregistrements.
 
-paiement :	id\_paiement, id\_eleve (clé étrangère), date\_paiement, montant\_verse, mode\_paiement, numero\_recu (unique)
+## License
 
-### Règles de calcul
+Ce projet est fourni sans licence spécifique dans le dépôt actuel.
 
+## Auteur
 
+<p align="center">
+  <img src="resources/photo_auteur.png" alt="Photo de l'auteur" width="180" />
+</p>
 
-* **Solde restant** = montant\_total\_du − somme(montant\_verse)
+<h3 align="center">Saba Akouété Félicio</h3>
 
-* **Statut Soldé** → solde = 0
+<p align="center">
+  Développeur et concepteur du projet <strong>Gestion des paiements scolaires</strong>.
+</p>
 
-* **Statut Partiellement payé** → solde > 0 et au moins 1 paiement
-
-* **Statut Non payé** → aucun paiement
-
-
-
-***
-
-## Charte Graphique
-
-
-
-* Couleur principale : `#1565C0` (bleu)
-
-* Fond : `#F5F7FA` (gris très clair)
-
-* Texte : `#263238` (sombre)
-
-* Pas de multicolore — sobriété et lisibilité
-
-
-
-***
-
-## Choix Techniques
-
-
-
-* **Langage** : Python 3 — simplicité, bibliothèques standard complètes
-
-* **Interface** : PySide6 — composants natifs riches, multiplateforme
-
-* **Base** : SQLite
-
-* **PDF** : fpdf2 --> contrôle total sur la mise en page
-
-* **Architecture** : 3 couches séparées — maintenance facilitée
-
-
-
-***
-
-## Limites connues
-
-
-
-* Application **mono-utilisateur** (accès au fichier `.db` à tour de rôle)
-
-* Pas de sauvegarde automatique → copier `data/gestion_paiements.db` régulièrement
-
-* Pas de gestion des comptes utilisateurs
-
-
-
-***
-
-## 👤 Auteur
-
-Projet réalisé dans le cadre de la formation **Développeur Web & Web Mobile**
-
-
-
-```
-```

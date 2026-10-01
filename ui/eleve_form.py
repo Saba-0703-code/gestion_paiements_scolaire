@@ -1,11 +1,12 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem,
     QPushButton, QLineEdit, QComboBox, QHeaderView, QDialog, QFormLayout,
-    QLineEdit, QDialogButtonBox, QMessageBox
+    QDialogButtonBox, QMessageBox
 )
 from data.repositories import EleveRepository
 from business.services import obtenir_statut_eleve
 
+# ✅ LA CLASSE DOIT ÊTRE DÉFINIE EN PREMIER DANS LE FICHIER
 class FormulaireEleve(QDialog):
     def __init__(self, parent=None, eleve=None):
         super().__init__(parent)
@@ -58,16 +59,17 @@ class FormulaireEleve(QDialog):
         except ValueError:
             QMessageBox.warning(self, "Erreur", "Montant invalide")
 
+
 class EcranListeEleves(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, callback_ouvrir_fiche, parent=None):
         super().__init__(parent)
+        self.callback_ouvrir_fiche = callback_ouvrir_fiche
         self.creer_interface()
         self.actualiser_liste()
 
     def creer_interface(self):
         layout = QVBoxLayout(self)
 
-        # Barre de recherche et filtre
         barre = QHBoxLayout()
         self.recherche_edit = QLineEdit()
         self.recherche_edit.setPlaceholderText("Rechercher un élève...")
@@ -78,14 +80,13 @@ class EcranListeEleves(QWidget):
         self.filtre_classe.currentTextChanged.connect(self.actualiser_liste)
 
         bouton_nouveau = QPushButton("➕ Nouvel élève")
-        bouton_nouveau.clicked.connect(self.ajouter_eleve)
+        bouton_nouveau.clicked.connect(self.ajouter_eleve)  # ✅ Connexion présente
 
         barre.addWidget(self.recherche_edit)
         barre.addWidget(self.filtre_classe)
         barre.addWidget(bouton_nouveau)
         layout.addLayout(barre)
 
-        # Tableau
         self.tableau = QTableWidget()
         self.tableau.setColumnCount(6)
         self.tableau.setHorizontalHeaderLabels(["Nom", "Prénom", "Classe", "Total dû", "Versé", "Statut"])
@@ -94,7 +95,6 @@ class EcranListeEleves(QWidget):
         self.tableau.doubleClicked.connect(self.ouvrir_fiche)
         layout.addWidget(self.tableau)
 
-        # Boutons d'action
         actions = QHBoxLayout()
         self.bouton_modifier = QPushButton("✏️ Modifier")
         self.bouton_modifier.clicked.connect(self.modifier_eleve)
@@ -111,7 +111,6 @@ class EcranListeEleves(QWidget):
             classe_filtre = None
 
         eleves = EleveRepository.liste_complete()
-        # Mise à jour des classes du filtre
         classes = sorted(set(e["classe"] for e in eleves))
         self.filtre_classe.blockSignals(True)
         self.filtre_classe.clear()
@@ -119,10 +118,10 @@ class EcranListeEleves(QWidget):
         self.filtre_classe.addItems(classes)
         if classe_filtre:
             idx = self.filtre_classe.findText(classe_filtre)
-            if idx >= 0: self.filtre_classe.setCurrentIndex(idx)
+            if idx >= 0:
+                self.filtre_classe.setCurrentIndex(idx)
         self.filtre_classe.blockSignals(False)
 
-        # Filtrage
         self.tableau.setRowCount(0)
         for e in eleves:
             nom_complet = f"{e['nom']} {e['prenom']}".lower()
@@ -145,14 +144,15 @@ class EcranListeEleves(QWidget):
             self.tableau.item(ligne, 0).setData(1000, e["id_eleve"])
 
     def ajouter_eleve(self):
-        form = FormulaireEleve(self)
+        form = FormulaireEleve(self)  # ✅ La classe est maintenant définie avant son utilisation
         if form.exec() == QDialog.Accepted:
             EleveRepository.ajouter(**form.donnees)
             self.actualiser_liste()
 
     def modifier_eleve(self):
         ligne = self.tableau.currentRow()
-        if ligne < 0: return
+        if ligne < 0:
+            return
         id_eleve = self.tableau.item(ligne, 0).data(1000)
         eleve = EleveRepository.par_id(id_eleve)
         form = FormulaireEleve(self, eleve)
@@ -162,7 +162,8 @@ class EcranListeEleves(QWidget):
 
     def supprimer_eleve(self):
         ligne = self.tableau.currentRow()
-        if ligne < 0: return
+        if ligne < 0:
+            return
         id_eleve = self.tableau.item(ligne, 0).data(1000)
         if QMessageBox.question(self, "Confirmer", "Supprimer cet élève ?") == QMessageBox.Yes:
             EleveRepository.supprimer(id_eleve)
@@ -170,6 +171,5 @@ class EcranListeEleves(QWidget):
 
     def ouvrir_fiche(self, index):
         id_eleve = self.tableau.item(index.row(), 0).data(1000)
-        fenetre = self.window()
-        if hasattr(fenetre, 'afficher_fiche_eleve'):
-            fenetre.afficher_fiche_eleve(id_eleve)
+        if self.callback_ouvrir_fiche:
+            self.callback_ouvrir_fiche(id_eleve)

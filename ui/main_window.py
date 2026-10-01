@@ -1,3 +1,6 @@
+from ui.eleve_form import EcranListeEleves
+from ui.tableau_bord import EcranTableauBord
+
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QStackedWidget, QLabel, QFrame
@@ -67,8 +70,12 @@ class MainWindow(QMainWindow):
 
         # Écrans
         self.ecran_tableau = EcranTableauBord()
-        self.ecran_eleves = EcranListeEleves(self.ouvrir_fiche_eleve)
-        self.ecran_fiche = None
+        # Dans __init__ de MainWindow :
+        self.ecran_eleves = EcranListeEleves(
+             self.afficher_fiche_eleve,
+             parent=self
+        )
+        
 
         self.contenu.addWidget(self.ecran_tableau)   # index 0
         self.contenu.addWidget(self.ecran_eleves)     # index 1
@@ -90,8 +97,14 @@ class MainWindow(QMainWindow):
         self.contenu.setCurrentWidget(self.ecran_fiche)
 
     def retour_liste(self):
-        """Retour à la liste des élèves"""
+        """Retourne à la liste des élèves"""
         self.contenu.setCurrentIndex(1)
         if self.ecran_fiche:
             self.contenu.removeWidget(self.ecran_fiche)
             self.ecran_fiche = None
+
+    def afficher_fiche_eleve(self, id_eleve):
+        """Ouvre la fiche détaillée d'un élève"""
+        from ui.fiche_eleve import EcranFicheEleve
+        fiche = EcranFicheEleve(id_eleve, parent=self)
+        fiche.exec()        
