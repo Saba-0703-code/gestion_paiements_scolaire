@@ -21,3 +21,4 @@ recus/
 build/
 dist/
 *.spec
+dist/
