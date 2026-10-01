@@ -11,7 +11,7 @@ class EcranTableauBord(QWidget):
     def creer_interface(self):
         layout = QVBoxLayout(self)
 
-        titre = QLabel("Petit Prince - Tableau de bord")
+        titre = QLabel("Tableau de bord")
         titre.setStyleSheet("font-size: 18pt; font-weight: bold; padding: 10px;")
         titre.setAlignment(Qt.AlignCenter)
         layout.addWidget(titre)
